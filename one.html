@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>One</title>
+  <style>
+body {
+  background: white;
+  color: black;
+  font-size: 18px;
+  text-align: center;
+  font-family: 'Teko';
+  letter-spacing: 0.15em;
+}
+
+body * { -webkit-user-select: none }
+
+.seeed-wrap {
+  position: relative;
+  width: 600px;
+  height: 180px;
+  margin: 0 auto;
+  box-shadow: 7px 7px 5px 0px rgba(0, 0, 0, 0.25);
+}
+
+.seeed-window {
+  overflow: hidden;
+  position: relative;
+  background: white;
+  height: 180px;
+  border: 1px solid black;
+}
+
+#seeed-carousel {
+  width: 10000px;
+  position: relative;
+  top: 0; left: -450px;
+  height: 180px;
+}
+
+.seeed-slide {
+  height: 180px;
+  width: 500px;
+  cursor: pointer;
+  float: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: white;
+  color: black;
+  border: 1px solid black;
+}
+
+.seeed-carousel-image{
+  display: flex;
+  align-self: center;
+  margin-top: 40px;
+}
+
+#seeed-prev, #seeed-next {
+  cursor: pointer;
+  position: absolute;
+  bottom: -40px;
+  font-size: 14pt;
+}
+
+#seeed-prev { left: 0 }
+#seeed-next { right: 0 }
+
+.seeed-transition {
+  transition: .7s;
+}
+  </style>
+</head>
+<body>
+    <h1>INFINITE CAROUSEL</h1>
+    <div class="seeed-wrap">
+      <div class="seeed-window">
+        <div id="seeed-carousel">
+          <span class="seeed-slide">
+            <img class="seeed-carousel-image" src="hey-now.jpg" height="100px" width="100px" />
+            <p class="seeed-tags">SLIDE-1</p>
+          </span>
+          <span class="seeed-slide">
+            <img class="seeed-carousel-image" src="hey-now.jpg" height="100px" width="100px" />
+            <p class="seeed-tags">SLIDE-2</p>
+          </span>  
+          <span class="seeed-slide">
+            <img class="seeed-carousel-image" src="hey-now.jpg" height="100px" width="100px" />
+            <p class="seeed-tags">SLIDE-3</p>
+          </span>
+          <span class="seeed-slide">
+            <img class="seeed-carousel-image" src="hey-now.jpg" height="100px" width="100px" />
+            <p class="seeed-tags">SLIDE-4</p>
+          </span>  
+          <span class="seeed-slide">
+            <img class="seeed-carousel-image" src="hey-now.jpg" height="100px" width="100px" />
+            <p class="seeed-tags">SLIDE-5</p>
+          </span>
+          <span class="seeed-slide">
+            <img class="seeed-carousel-image" src="hey-now.jpg" height="100px" width="100px" />
+            <p class="seeed-tags">SLIDE-6</p>
+          </span>
+          <span class="seeed-slide">
+            <img class="seeed-carousel-image" src="hey-now.jpg" height="100px" width="100px" />
+            <p class="seeed-tags">SLIDE-7</p>
+          </span>
+          <span class="seeed-slide">
+            <img class="seeed-carousel-image" src="hey-now.jpg" height="100px" width="100px" />
+            <p class="seeed-tags">SLIDE-8</p>
+          </span>
+          <span class="seeed-slide">
+            <img class="seeed-carousel-image" src="hey-now.jpg" height="100px" width="100px" />
+            <p class="seeed-tags">SLIDE-9</p>
+          </span>
+          <span class="seeed-slide">
+            <img class="seeed-carousel-image" src="hey-now.jpg" height="100px" width="100px" />
+            <p class="seeed-tags">SLIDE-10</p>
+          </span>
+          <span class="seeed-slide">
+            <img class="seeed-carousel-image" src="hey-now.jpg" height="100px" width="100px" />
+            <p class="seeed-tags">SLIDE-11</p>
+          </span>
+          <span class="seeed-slide">
+            <img class="seeed-carousel-image" src="hey-now.jpg" height="100px" width="100px" />
+            <p class="seeed-tags">SLIDE-12</p>
+          </span>
+          <span class="seeed-slide">
+            <img class="seeed-carousel-image" src="hey-now.jpg" height="100px" width="100px" />
+            <p class="seeed-tags">SLIDE-13</p>
+          </span>
+        </div>
+      </div>
+      <span id="seeed-prev">PREV</span>
+      <span id="seeed-next">NEXT</span>
+    </div>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
+<script>
+var carousel = $('#seeed-carousel'),
+    threshold = 150,
+    slideWidth = 500,
+    dragStart, 
+    dragEnd;
+
+$('#seeed-next').click(function(){ shiftSlide(-1) })
+$('#seeed-prev').click(function(){ shiftSlide(1) })
+
+carousel.on('mousedown', function(){
+  if (carousel.hasClass('seeed-transition')) return;
+  dragStart = event.pageX;
+  $(this).on('mousemove', function(){
+    dragEnd = event.pageX;
+    $(this).css('transform','translateX('+ dragPos() +'px)')
+  })
+  $(document).on('mouseup', function(){
+    if (dragPos() > threshold) { return shiftSlide(1) }
+    if (dragPos() < -threshold) { return shiftSlide(-1) }
+    shiftSlide(0);
+  })
+});
+
+function dragPos() {
+  return dragEnd - dragStart;
+}
+
+function shiftSlide(direction) {
+  if (carousel.hasClass('seeed-transition')) return;
+  dragEnd = dragStart;
+  $(document).off('mouseup')
+  carousel.off('mousemove')
+          .addClass('seeed-transition')
+          .css('transform','translateX(' + (direction * slideWidth) + 'px)'); 
+  setTimeout(function(){
+    if (direction === 1) {
+      $('.seeed-slide:first').before($('.seeed-slide:last'));
+    } else if (direction === -1) {
+      $('.seeed-slide:last').after($('.seeed-slide:first'));
+    }
+    carousel.removeClass('seeed-transition')
+		carousel.css('transform','translateX(0px)'); 
+  },700)
+}
+</script>
+</body>
+</html>
